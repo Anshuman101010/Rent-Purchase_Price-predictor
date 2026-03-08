@@ -1,0 +1,59 @@
+body{
+background: linear-gradient(135deg,#667eea,#764ba2);
+min-height:100vh;
+display:flex;
+align-items:center;
+font-family: 'Segoe UI', sans-serif;
+color:white;
+}
+
+.header h1{
+font-weight:700;
+}
+
+.header p{
+opacity:0.9;
+}
+
+.form-card{
+background:white;
+border-radius:15px;
+padding:35px;
+box-shadow:0 10px 30px rgba(0,0,0,0.2);
+color:#333;
+}
+
+label{
+font-weight:500;
+margin-bottom:5px;
+}
+
+.form-control{
+border-radius:8px;
+padding:10px;
+}
+
+.form-control:focus{
+box-shadow:0 0 6px rgba(102,126,234,0.6);
+border-color:#667eea;
+}
+
+.btn-predict{
+background:#667eea;
+color:white;
+padding:12px;
+border:none;
+border-radius:8px;
+font-weight:600;
+transition:0.3s;
+}
+
+.btn-predict:hover{
+background:#5a6fd6;
+transform:translateY(-2px);
+}
+
+i{
+margin-right:6px;
+color:#667eea;
+}
