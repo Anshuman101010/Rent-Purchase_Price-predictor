@@ -46,33 +46,39 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
 <input type="number" name="bathroom" class="form-control" required>
 </div>
 
-<div class="col-md-6 mb-3">
-<label><i class="fa-solid fa-city"></i> City</label>
-<select name="city" class="form-control">
-<option value="0">Mumbai</option>
-<option value="1">Delhi</option>
-<option value="2">Bangalore</option>
-<option value="3">Hyderabad</option>
-<option value="4">Chennai</option>
-<option value="5">Kolkata</option>
+<div class="mb-3">
+<label>City</label>
+<select id="city" name="city" class="form-control" onchange="updateLocality()">
+<option value="">Select City</option>
+<option value="Bangalore">Bangalore</option>
+<option value="Hyderabad">Hyderabad</option>
+<option value="Delhi">Delhi</option>
+<option value="Mumbai">Mumbai</option>
+</select>
+</div>
+
+<div class="mb-3">
+<label>Locality</label>
+<select id="locality" name="locality" class="form-control">
+<option>Select City First</option>
 </select>
 </div>
 
 <div class="col-md-6 mb-3">
 <label><i class="fa-solid fa-building"></i> Area Type</label>
-<select name="area" class="form-control">
-<option value="0">Super Area</option>
-<option value="1">Carpet Area</option>
-<option value="2">Built Area</option>
+<select name="area_type" class="form-control">
+<option value="Super Area">Super Area</option>
+<option value="Carpet Area">Carpet Area</option>
+<option value="Built Area">Built Area</option>
 </select>
 </div>
 
 <div class="col-md-6 mb-3">
 <label><i class="fa-solid fa-couch"></i> Furnishing</label>
 <select name="furnish" class="form-control">
-<option value="0">Unfurnished</option>
-<option value="1">Semi Furnished</option>
-<option value="2">Fully Furnished</option>
+<option value="Unfurnished">Unfurnished</option>
+<option value="Semi-Furnished">Semi-Furnished</option>
+<option value="Furnished">Furnished</option>
 </select>
 </div>
 
@@ -89,4 +95,63 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
 </div>
 
 </body>
+<script>
+
+const localityData = {
+
+Bangalore:[
+"Whitefield",
+"Electronic City",
+"Indiranagar",
+"HSR Layout"
+],
+
+Hyderabad:[
+"Gachibowli",
+"Banjara Hills",
+"Kondapur",
+"Madhapur"
+],
+
+Delhi:[
+"Saket",
+"Dwarka",
+"Rohini",
+"Lajpat Nagar"
+],
+
+Mumbai:[
+"Andheri",
+"Powai",
+"Bandra",
+"Thane"
+]
+
+}
+
+function updateLocality(){
+
+let city=document.getElementById("city").value
+let locality=document.getElementById("locality")
+
+locality.innerHTML=""
+
+if(localityData[city]){
+
+localityData[city].forEach(function(area){
+
+let option=document.createElement("option")
+
+option.value=area
+option.text=area
+
+locality.appendChild(option)
+
+})
+
+}
+
+}
+
+</script>
 </html>

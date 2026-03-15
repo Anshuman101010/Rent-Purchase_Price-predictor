@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>Signup</title>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='login_signup_style.css') }}">
+
+</head>
+
+<body>
+
+<div class="circle"></div>
+<div class="circle"></div>
+<div class="circle"></div>
+
+<div class="auth-container">
+
+<div class="auth-card">
+
+<h2>🏠 Create Account</h2>
+<p>Join the Rent Predictor</p>
+
+<div class="input-group">
+<input type="email" id="email" placeholder="Enter Email">
+</div>
+
+<div class="input-group">
+<input type="password" id="password" placeholder="Create Password">
+</div>
+
+<button class="auth-btn" onclick="signup()">Signup</button>
+
+<div class="switch-link">
+Already have an account? <a href="/">Login</a>
+</div>
+
+</div>
+
+</div>
+
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import { getAuth, createUserWithEmailAndPassword }
+
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+
+const firebaseConfig = {
+
+apiKey: "AIzaSyB1Apdn-DlO-sIRtM9GxZWcScvF73MvOLc",
+authDomain: "house-rent-predictor-67b30.firebaseapp.com",
+projectId: "house-rent-predictor-67b30",
+storageBucket: "house-rent-predictor-67b30.firebasestorage.app",
+messagingSenderId: "821441464234",
+appId: "1:821441464234:web:5cf8da0f44aa622cda0dd3"
+
+};
+
+const app=initializeApp(firebaseConfig);
+
+const auth=getAuth(app);
+
+window.signup=function(){
+
+const email=document.getElementById("email").value;
+
+const password=document.getElementById("password").value;
+
+createUserWithEmailAndPassword(auth,email,password)
+
+.then(()=>{
+
+window.location.href="/";
+
+})
+
+.catch((error)=>{
+
+alert(error.message);
+
+});
+
+}
+
+</script>
+
+</body>
+
+</html>
