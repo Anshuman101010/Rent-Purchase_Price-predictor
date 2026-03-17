@@ -47,42 +47,53 @@ New user? <a href="/signup">Create Account</a>
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
-import { getAuth, signInWithEmailAndPassword }
+import { 
+getAuth,
+signInWithEmailAndPassword,
+setPersistence,
+browserLocalPersistence
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
-
+// ✅ ADD YOUR FIREBASE CONFIG HERE
 const firebaseConfig = {
-
-apiKey: "AIzaSyB1Apdn-DlO-sIRtM9GxZWcScvF73MvOLc",
+  apiKey: "AIzaSyB1Apdn-DlO-sIRtM9GxZWcScvF73MvOLc",
 authDomain: "house-rent-predictor-67b30.firebaseapp.com",
 projectId: "house-rent-predictor-67b30",
 storageBucket: "house-rent-predictor-67b30.firebasestorage.app",
 messagingSenderId: "821441464234",
 appId: "1:821441464234:web:5cf8da0f44aa622cda0dd3"
-
 };
 
-const app=initializeApp(firebaseConfig);
+// ✅ INITIALIZE APP (YOU MISSED THIS)
+const app = initializeApp(firebaseConfig);
 
-const auth=getAuth(app);
+// ✅ GET AUTH
+const auth = getAuth(app);
 
-window.login=function(){
+// ✅ ENABLE PERSISTENCE
+setPersistence(auth, browserLocalPersistence);
 
-const email=document.getElementById("email").value;
+window.login = function(){
 
-const password=document.getElementById("password").value;
+const email = document.getElementById("email").value;
+const password = document.getElementById("password").value;
 
 signInWithEmailAndPassword(auth,email,password)
 
 .then(()=>{
 
+console.log("Login success");
+
+// small delay helps Firebase
+setTimeout(()=>{
 window.location.href="/home";
+},1000);
 
 })
 
 .catch((error)=>{
 
+console.log(error);
 alert(error.message);
 
 });

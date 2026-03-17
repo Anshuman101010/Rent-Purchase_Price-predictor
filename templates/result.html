@@ -29,13 +29,76 @@ Estimated Monthly Rent: ₹ {{rent}}
 Estimated House Price: ₹ {{price}}
 </p>
 
-<a href="/" class="btn btn-dark mt-3">
+<a href="/home" class="btn btn-dark mt-3">
 Predict Again
+</a>
+<a href="/my_predictions" class="btn btn-success mt-3">
+View My Predictions
 </a>
 
 </div>
 
 </div>
+<script type="module">
 
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import { 
+getFirestore,
+collection,
+addDoc
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+import {
+getAuth,
+onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+const firebaseConfig = {
+    apiKey: "AIzaSyB1Apdn-DlO-sIRtM9GxZWcScvF73MvOLc",
+authDomain: "house-rent-predictor-67b30.firebaseapp.com",
+projectId: "house-rent-predictor-67b30",
+storageBucket: "house-rent-predictor-67b30.firebasestorage.app",
+messagingSenderId: "821441464234",
+appId: "1:821441464234:web:5cf8da0f44aa622cda0dd3"
+  // your config
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app);
+
+onAuthStateChanged(auth, async (user) => {
+
+if(user){
+
+try{
+
+await addDoc(collection(db,"predictions"),{
+
+email: user.email,
+rent: Number("{{rent}}"),
+price: Number("{{price}}"),
+timestamp: new Date()
+
+});
+
+console.log("✅ SAVED SUCCESSFULLY");
+
+}catch(error){
+
+console.log("❌ ERROR:", error);
+
+}
+
+}else{
+
+console.log("❌ USER NOT FOUND");
+
+}
+
+});
+
+</script>
 </body>
 </html>

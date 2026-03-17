@@ -42,7 +42,9 @@ def signup():
 def home():
     return render_template("index.html")
 
-
+@app.route("/my_predictions")
+def my_predictions():
+    return render_template("predictions.html")
 # -------------------------------
 # Prediction Route
 # -------------------------------
@@ -88,7 +90,7 @@ def predict():
 
     except Exception as e:
         return f"Error during prediction: {str(e)}"
-
+    
 
 # -------------------------------
 # Run Flask App
