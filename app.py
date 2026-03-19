@@ -82,10 +82,24 @@ def predict():
         # Estimate house price
         price = rent * 200
 
+        # Long-term rent calculation
+        years = 15
+        total_rent = rent * 12 * years
+
+        # Calculate percentage difference
+        difference = abs(price - total_rent)
+        percent = (difference / price) * 100
+
         return render_template(
-            "result.html",
+            "predict.html",
             rent=round(rent, 2),
-            price=round(price, 2)
+            price=round(price, 2),
+            total_rent=round(total_rent, 2),
+            years=years,
+            percent=round(percent, 2),
+            pred_area=size,
+            areas=[500, 800, 1000, 1200, 1500],
+            prices=[10000, 15000, 20000, 25000, 30000]
         )
 
     except Exception as e:
