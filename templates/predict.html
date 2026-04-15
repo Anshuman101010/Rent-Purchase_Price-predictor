@@ -126,6 +126,46 @@
 
 </div>
 
+<script type="module">
+
+// ✅ FIREBASE IMPORTS  
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+// ✅ FIREBASE CONFIG
+const firebaseConfig = {
+    apiKey: "AIzaSyB1Apdn-DlO-sIRtM9GxZWcScvF73MvOLc",
+    authDomain: "house-rent-predictor-67b30.firebaseapp.com",
+    projectId: "house-rent-predictor-67b30",
+    storageBucket: "house-rent-predictor-67b30.firebasestorage.app",
+    messagingSenderId: "821441464234",
+    appId: "1:821441464234:web:5cf8da0f44aa622cda0dd3"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app);
+
+// ✅ SAVE PREDICTION ON PAGE LOAD
+onAuthStateChanged(auth, async (user) => {
+    if(user){
+        try {
+            await addDoc(collection(db, "predictions"), {
+                email: user.email,
+                rent: {{ rent | tojson }},
+                price: {{ price | tojson }},
+                timestamp: serverTimestamp()
+            });
+            console.log("✅ Prediction saved to Firebase!");
+        } catch (error) {
+            console.error("❌ Error saving prediction:", error);
+        }
+    }
+});
+
+</script>
+
 <script>
 const total_rent = {{ total_rent | tojson }};
 const price = {{ price | tojson }};
