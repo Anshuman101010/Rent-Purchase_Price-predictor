@@ -29,6 +29,8 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
 
 <form action="/predict" method="post">
 
+<input type="hidden" name="email" id="user_email" value="">
+
 <div class="row">
 
 <div class="col-md-6 mb-3">
@@ -157,4 +159,27 @@ locality.appendChild(option)
 }
 
 </script>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+const firebaseConfig = {
+	apiKey: "AIzaSyB1Apdn-DlO-sIRtM9GxZWcScvF73MvOLc",
+	authDomain: "house-rent-predictor-67b30.firebaseapp.com",
+	projectId: "house-rent-predictor-67b30",
+	storageBucket: "house-rent-predictor-67b30.firebasestorage.app",
+	messagingSenderId: "821441464234",
+	appId: "1:821441464234:web:5cf8da0f44aa622cda0dd3"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+onAuthStateChanged(auth, (user)=>{
+	const input = document.getElementById('user_email');
+	if(user && input) input.value = user.email;
+});
+
+</script>
+
 </html>

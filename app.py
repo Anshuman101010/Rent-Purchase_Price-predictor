@@ -1,4 +1,5 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, jsonify
+import os, json, datetime, uuid
 import joblib
 import numpy as np
 
@@ -90,6 +91,38 @@ def predict():
         difference = abs(price - total_rent)
         percent = (difference / price) * 100
 
+        # --- Server-side backup: persist prediction with generated id ---
+        try:
+            record = {
+                "id": str(uuid.uuid4()),
+                "email": request.form.get('email') or 'unknown',
+                "rent": float(rent),
+                "price": float(price),
+                "pred_area": int(size),
+                "years": years,
+                "total_rent": float(total_rent),
+                "percent": float(round(percent,2)),
+                "timestamp": datetime.datetime.utcnow().isoformat() + 'Z'
+            }
+            storage_path = os.path.join(os.path.dirname(__file__), 'models', 'predictions.json')
+            if not os.path.exists(storage_path):
+                with open(storage_path, 'w', encoding='utf-8') as f:
+                    json.dump([record], f, ensure_ascii=False, indent=2)
+            else:
+                with open(storage_path, 'r+', encoding='utf-8') as f:
+                    try:
+                        arr = json.load(f)
+                        if not isinstance(arr, list):
+                            arr = []
+                    except Exception:
+                        arr = []
+                    arr.append(record)
+                    f.seek(0)
+                    json.dump(arr, f, ensure_ascii=False, indent=2)
+                    f.truncate()
+        except Exception:
+            pass
+
         return render_template(
             "predict.html",
             rent=round(rent, 2),
@@ -107,8 +140,79 @@ def predict():
     
 
 # -------------------------------
-# Run Flask App
+# Run Flask App (moved to bottom)
 # -------------------------------
+
+
+@app.route('/save_prediction', methods=['POST'])
+def save_prediction():
+    try:
+        data = request.get_json()
+        if not data:
+            return jsonify({"status":"error","message":"no json"}),400
+        record = {
+            "id": data.get('id') or str(uuid.uuid4()),
+            "email": data.get('email') or 'unknown',
+            "rent": float(data.get('rent',0)),
+            "price": float(data.get('price',0)),
+            "pred_area": int(data.get('pred_area',0)),
+            "timestamp": data.get('timestamp') or datetime.datetime.utcnow().isoformat() + 'Z'
+        }
+        storage_path = os.path.join(os.path.dirname(__file__), 'models', 'predictions.json')
+        if not os.path.exists(storage_path):
+            with open(storage_path, 'w', encoding='utf-8') as f:
+                json.dump([record], f, ensure_ascii=False, indent=2)
+        else:
+            with open(storage_path, 'r+', encoding='utf-8') as f:
+                try:
+                    arr = json.load(f)
+                    if not isinstance(arr, list):
+                        arr = []
+                except Exception:
+                    arr = []
+                arr.append(record)
+                f.seek(0)
+                json.dump(arr, f, ensure_ascii=False, indent=2)
+                f.truncate()
+        return jsonify({"status":"ok","id":record['id']})
+    except Exception as e:
+        return jsonify({"status":"error","message":str(e)}),500
+
+
+@app.route('/predictions_backup', methods=['GET'])
+def predictions_backup():
+    storage_path = os.path.join(os.path.dirname(__file__), 'models', 'predictions.json')
+    if not os.path.exists(storage_path):
+        return jsonify([])
+    try:
+        with open(storage_path, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+            if not isinstance(data, list):
+                data = []
+    except Exception:
+        data = []
+    return jsonify(data)
+
+
+@app.route('/prediction_view')
+def prediction_view():
+    rent = float(request.args.get('rent', 0) or 0)
+    price = float(request.args.get('price', 0) or 0)
+    pred_area = int(request.args.get('pred_area', 0) or 0)
+    years = int(request.args.get('years', 15) or 15)
+    total_rent = round(rent * 12 * years, 2)
+    percent = round((abs(price - total_rent) / price) * 100, 2) if price else 0
+
+    return render_template(
+        'prediction_view.html',
+        rent=rent,
+        price=price,
+        pred_area=pred_area,
+        years=years,
+        total_rent=total_rent,
+        percent=percent
+    )
+
 
 if __name__ == "__main__":
     app.run(debug=True)

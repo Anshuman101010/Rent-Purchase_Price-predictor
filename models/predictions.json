@@ -1,0 +1,134 @@
+[
+  {
+    "email": "unknown",
+    "rent": 22020.0,
+    "price": 4404000.0,
+    "timestamp": "2026-05-24T06:28:19.205578Z"
+  },
+  {
+    "email": "anshumanchakravorty000@gmail.com",
+    "rent": 18755.0,
+    "price": 3751000.0,
+    "timestamp": "2026-05-24T06:30:48.695996Z"
+  },
+  {
+    "id": "7d2a9edf-9a9c-4e0f-8cbf-befa8ca45675",
+    "email": "test@example.com",
+    "rent": 15297.5,
+    "price": 3059500.0,
+    "pred_area": 900,
+    "years": 15,
+    "total_rent": 2753550.0,
+    "percent": 10.0,
+    "timestamp": "2026-05-24T06:41:39.783524Z"
+  },
+  {
+    "id": "cab45614-1fde-45ed-9b44-985e590bed56",
+    "email": "anshumanchakravorty000@gmail.com",
+    "rent": 16547.5,
+    "price": 3309500.0,
+    "pred_area": 1200,
+    "years": 15,
+    "total_rent": 2978550.0,
+    "percent": 10.0,
+    "timestamp": "2026-05-24T06:48:13.364872Z"
+  },
+  {
+    "id": "486885f8-7a17-42c3-98b2-229fe2c31243",
+    "email": "anshumanchakravorty000@gmail.com",
+    "rent": 16547.5,
+    "price": 3309500.0,
+    "pred_area": 1200,
+    "timestamp": "2026-05-24T06:48:13.827Z"
+  },
+  {
+    "id": "7f6684bf-d63c-42de-9397-5a41a0cdef72",
+    "email": "anshumanchakravorty000@gmail.com",
+    "rent": 22782.5,
+    "price": 4556500.0,
+    "pred_area": 1400,
+    "years": 15,
+    "total_rent": 4100850.0,
+    "percent": 10.0,
+    "timestamp": "2026-05-24T06:49:21.237161Z"
+  },
+  {
+    "id": "4941344b-8b4c-4ac3-a480-bcc0d2c9576a",
+    "email": "anshumanchakravorty000@gmail.com",
+    "rent": 22782.5,
+    "price": 4556500.0,
+    "pred_area": 1400,
+    "timestamp": "2026-05-24T06:49:21.613Z"
+  },
+  {
+    "id": "42bc1afd-ca26-4283-b354-5c948065992a",
+    "email": "anshumanchakravorty000@gmail.com",
+    "rent": 103980.0,
+    "price": 20796000.0,
+    "pred_area": 18000,
+    "years": 15,
+    "total_rent": 18716400.0,
+    "percent": 10.0,
+    "timestamp": "2026-05-24T06:50:02.555648Z"
+  },
+  {
+    "id": "d8165c75-730e-4a13-825a-66132110e1fa",
+    "email": "anshumanchakravorty000@gmail.com",
+    "rent": 103980.0,
+    "price": 20796000.0,
+    "pred_area": 18000,
+    "timestamp": "2026-05-24T06:50:02.957Z"
+  },
+  {
+    "id": "c49975eb-e429-4950-ad25-a4b195e732b6",
+    "email": "anshumanchakravorty000@gmail.com",
+    "rent": 15925.0,
+    "price": 3185000.0,
+    "pred_area": 1200,
+    "years": 15,
+    "total_rent": 2866500.0,
+    "percent": 10.0,
+    "timestamp": "2026-05-24T06:53:50.766495Z"
+  },
+  {
+    "id": "51578866-e5e2-410c-be73-5e18f9b0765c",
+    "email": "anshumanchakravorty000@gmail.com",
+    "rent": 15925.0,
+    "price": 3185000.0,
+    "pred_area": 1200,
+    "timestamp": "2026-05-24T06:53:51.236Z"
+  },
+  {
+    "id": "c9ac37e6-3f4d-42d0-be3d-914e25132c53",
+    "email": "anshumanchakravorty000@gmail.com",
+    "rent": 16547.5,
+    "price": 3309500.0,
+    "pred_area": 1200,
+    "years": 15,
+    "total_rent": 2978550.0,
+    "percent": 10.0,
+    "timestamp": "2026-05-24T07:12:08.711884Z"
+  },
+  {
+    "id": "00648afa-0aac-43c8-923b-839c50441d04",
+    "email": "anshumanchakravorty000@gmail.com",
+    "rent": 11828.0,
+    "price": 2365600.0,
+    "pred_area": 2,
+    "years": 15,
+    "total_rent": 2129040.0,
+    "percent": 10.0,
+    "timestamp": "2026-05-24T07:17:39.045181Z"
+  },
+  {
+    "id": "9a356b65-cb2d-4f69-bea6-6ca29e670524",
+    "email": "anshumanchakravorty000@gmail.com",
+    "rent": 197100.0,
+    "price": 39420000.0,
+    "pred_area": 20000,
+    "years": 15,
+    "total_rent": 35478000.0,
+    "percent": 10.0,
+    "timestamp": "2026-05-24T07:21:37.651429Z"
+  }
+]

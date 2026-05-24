@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Prediction View</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #f4f6f9; margin: 0; padding: 20px; }
+        .card { border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.08); border: none; }
+        .chart-card { min-height: 320px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="card p-4 mb-4">
+        <h2 class="mb-3">Prediction Dashboard</h2>
+        <p id="rentText" class="lead"></p>
+        <p id="priceText" class="lead"></p>
+        <a href="/home" class="btn btn-secondary">← Back</a>
+    </div>
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card p-3 chart-card">
+                <h5>Cost Comparison</h5>
+                <canvas id="barChart"></canvas>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card p-3 chart-card">
+                <h5>Rent Growth</h5>
+                <canvas id="rentGrowthChart"></canvas>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card p-3 chart-card">
+                <h5>Area vs Price Trend</h5>
+                <canvas id="trendChart"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="card p-4 mt-4">
+        <h5>Smart Investment Insight</h5>
+        <p id="insightText"></p>
+        <ul id="insightList"></ul>
+    </div>
+</div>
+<script>
+    const params = new URLSearchParams(window.location.search);
+    const rent = parseFloat(params.get('rent') || 0);
+    const price = parseFloat(params.get('price') || 0);
+    const pred_area = parseInt(params.get('pred_area') || 0);
+    const years = parseInt(params.get('years') || 15);
+    const totalRent = rent * 12 * years;
+    const percent = price ? Math.round((Math.abs(price - totalRent) / price) * 100 * 100) / 100 : 0;
+
+    document.getElementById('rentText').textContent = 'Estimated Rent: ₹ ' + rent.toFixed(2);
+    document.getElementById('priceText').textContent = 'Estimated Price: ₹ ' + price.toFixed(2);
+
+    new Chart(document.getElementById('barChart'), {
+        type: 'bar',
+        data: {
+            labels: ['Total Rent (' + years + ' yrs)', 'House Price'],
+            datasets: [{ data: [totalRent, price], backgroundColor: ['#ff9800', '#2e7d32'] }]
+        }
+    });
+
+    const yearlyRent = Array.from({ length: years }, (_, i) => rent * 12 * (i + 1));
+    new Chart(document.getElementById('rentGrowthChart'), {
+        type: 'line',
+        data: {
+            labels: Array.from({ length: years }, (_, i) => i + 1),
+            datasets: [{ label: 'Total Rent', data: yearlyRent, borderColor: '#e91e63', fill: false }]
+        }
+    });
+
+    const trendAreas = [500, 800, 1000, 1200, 1500, pred_area].sort((a,b) => a - b);
+    const trendPrices = [1500000, 2200000, 2800000, 3200000, 3800000, price].slice(0, trendAreas.length);
+    new Chart(document.getElementById('trendChart'), {
+        type: 'line',
+        data: {
+            labels: trendAreas,
+            datasets: [{ label: 'Price Trend', data: trendPrices, borderColor: '#f57c00', fill: false }]
+        }
+    });
+
+    const insightText = price && totalRent ? (totalRent > price ? 'Buying looks more economical over this period.' : 'Renting looks more cost-effective overall.') : 'Prediction data is incomplete for insight.';
+    document.getElementById('insightText').textContent = insightText;
+    document.getElementById('insightList').innerHTML = `
+        <li><strong>Total rent for ${years} years:</strong> ₹ ${totalRent.toFixed(2)}</li>
+        <li><strong>Property price:</strong> ₹ ${price.toFixed(2)}</li>
+        <li><strong>Cost difference:</strong> ${percent}%</li>
+        <li>${totalRent > price ? '✅ Buying is more economical in the long term.' : '⚠️ Renting is more cost-effective over this period.'}</li>
+    `;
+</script>
+</body>
+</html>

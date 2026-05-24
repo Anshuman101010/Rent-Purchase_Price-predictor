@@ -45,6 +45,7 @@ text-align:center;
 <th>Rent</th>
 <th>Price</th>
 <th>Date</th>
+<th>Action</th>
 </tr>
 </thead>
 
@@ -87,53 +88,74 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
 
-// ✅ WAIT FOR AUTH (THIS IS THE KEY FIX)
+const parseTimestamp = (timestamp) => {
+  if (!timestamp) return 'Unknown';
+  try {
+    if (typeof timestamp === 'string') return new Date(timestamp).toLocaleString();
+    if (timestamp.seconds) return new Date(timestamp.seconds * 1000).toLocaleString();
+    if (timestamp.toDate) return timestamp.toDate().toLocaleString();
+  } catch (e) {}
+  return 'Unknown';
+};
+
 onAuthStateChanged(auth, async (user) => {
+  if (!user) {
+    window.location.href = '/';
+    return;
+  }
 
-if(user){
+  const table = document.getElementById('predictionTable');
+  table.innerHTML = '';
+  const seen = new Set();
 
-console.log("User:", user.email);
+  try {
+    const q = query(collection(db, 'predictions'), where('email', '==', user.email));
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc) => {
+      const data = doc.data();
+      const ts = parseTimestamp(data.timestamp);
+      const key = `${data.rent}|${data.price}|${ts}`;
+      seen.add(key);
+      const url = `/prediction_view?rent=${encodeURIComponent(data.rent)}&price=${encodeURIComponent(data.price)}&pred_area=${encodeURIComponent(data.pred_area || 0)}&years=${encodeURIComponent(data.years || 15)}`;
+      table.innerHTML += `
+        <tr>
+          <td>₹${data.rent}</td>
+          <td>₹${data.price}</td>
+          <td>${ts}</td>
+          <td><a class="btn btn-sm btn-primary" href="${url}">View Dashboard</a></td>
+        </tr>`;
+    });
+  } catch (e) {
+    console.warn('Firestore read failed', e);
+  }
 
-// ✅ QUERY ONLY USER DATA
-const q = query(
-collection(db,"predictions"),
-where("email","==",user.email)
-);
+  try {
+    const resp = await fetch('/predictions_backup');
+    if (resp.ok) {
+      const backups = await resp.json();
+      backups.forEach((b) => {
+        if (b.email !== user.email) return;
+        const ts = parseTimestamp(b.timestamp);
+        const key = `${b.rent}|${b.price}|${ts}`;
+        if (seen.has(key)) return;
+        seen.add(key);
+        const url = `/prediction_view?rent=${encodeURIComponent(b.rent)}&price=${encodeURIComponent(b.price)}&pred_area=${encodeURIComponent(b.pred_area || 0)}&years=${encodeURIComponent(b.years || 15)}`;
+        table.innerHTML += `
+          <tr>
+            <td>₹${b.rent}</td>
+            <td>₹${b.price}</td>
+            <td>${ts}</td>
+            <td><a class="btn btn-sm btn-primary" href="${url}">View Dashboard</a></td>
+          </tr>`;
+      });
+    }
+  } catch (e) {
+    console.warn('Backup fetch failed', e);
+  }
 
-const querySnapshot = await getDocs(q);
-
-let table = document.getElementById("predictionTable");
-table.innerHTML = "";
-
-// ✅ ADD ROWS
-querySnapshot.forEach((doc)=>{
-
-let data = doc.data();
-
-let row = `
-<tr>
-<td>₹${data.rent}</td>
-<td>₹${data.price}</td>
-<td>${new Date(data.timestamp.seconds * 1000).toLocaleString()}</td>
-</tr>
-`;
-
-table.innerHTML += row;
-
-});
-
-// ✅ IF EMPTY
-if(table.innerHTML === ""){
-table.innerHTML = "<tr><td colspan='3'>No predictions found</td></tr>";
-}
-
-}else{
-
-console.log("No user → redirecting");
-window.location.href = "/";
-
-}
-
+  if (table.innerHTML.trim() === '') {
+    table.innerHTML = "<tr><td colspan='4'>No predictions found</td></tr>";
+  }
 });
 
 </script>
